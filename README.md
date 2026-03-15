@@ -152,7 +152,6 @@ mini-task-management/
 │
 └── README.md
 ```
-```
 
 ## Setup Instructions
  

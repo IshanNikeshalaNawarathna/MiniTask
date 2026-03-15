@@ -63,6 +63,97 @@ CREATE TABLE tasks (
     ON DELETE CASCADE
 );
 ```
+
+## Project Structure
+```
+
+mini-task-management/
+├── mini-task/                             # Next.js application
+│   ├── components/                       # Reusable UI components
+│   ├── pages/                            # Next.js pages (login, register, tasks)
+│   ├── services/                         # Axios API service calls
+│   ├── context/                          # Auth state management
+│   ├── .env.local.example                # Frontend environment variable template
+│   └── package.json
+│
+├── task_backend/                              # Spring Boot application
+│   └── src/main/java/lk/mini/task_backend/
+│       │
+│       ├── data/                         # Data layer
+│       │   ├── adapter/                  # Repository implementations
+│       │   │   ├── AuthRepositoryImpl
+│       │   │   ├── DataInitializer
+│       │   │   ├── TaskRepositoryImpl
+│       │   │   └── UserRepositoryImpl
+│       │   ├── config/
+│       │   │   └── SecurityConfig
+│       │   ├── entity/                   # JPA entities
+│       │   │   ├── Task
+│       │   │   └── User
+│       │   ├── mapper/                   # Entity ↔ Model mappers
+│       │   │   ├── TaskJpaMapper
+│       │   │   └── UserJpaMapper
+│       │   ├── repository/               # Spring Data JPA interfaces
+│       │   │   ├── TaskJpa
+│       │   │   └── UserJpa
+│       │   └── security/                 # JWT & Spring Security
+│       │       ├── CustomUserDetailsService
+│       │       ├── JwtFilter
+│       │       └── JwtService
+│       │
+│       ├── domain/                       # Domain / Business layer
+│       │   ├── enums/
+│       │   │   ├── Priority
+│       │   │   ├── Role
+│       │   │   └── Status
+│       │   ├── model/                    # Domain models
+│       │   │   ├── TaskModel
+│       │   │   └── UserModel
+│       │   ├── repository/               # Repository interfaces (ports)
+│       │   │   ├── AuthRepository
+│       │   │   ├── TaskRepository
+│       │   │   └── UserRepository
+│       │   └── usecase/                  # Use case interfaces
+│       │       ├── task/
+│       │       │   ├── FindAllUsersUseCase
+│       │       │   ├── TaskDeleteUseCase
+│       │       │   ├── TaskSaveUseCase
+│       │       │   ├── TaskUpdateStatusUseCase
+│       │       │   └── TaskUpdateUseCase
+│       │       └── user/
+│       │           ├── AuthenticateUseCase
+│       │           └── RegisterUseCase
+│       │
+│       ├── presentation/                 # Presentation layer
+│       │   ├── controller/
+│       │   │   ├── TaskController
+│       │   │   └── UserController
+│       │   ├── dto/
+│       │   │   ├── error/
+│       │   │   │   └── ErrorResponse
+│       │   │   ├── task/
+│       │   │   │   ├── PageResponse
+│       │   │   │   ├── TaskRequest
+│       │   │   │   └── TaskResponse
+│       │   │   └── user/
+│       │   │       ├── AuthRequest
+│       │   │       ├── AuthResponse
+│       │   │       └── UserRequest
+│       │   ├── error/
+│       │   │   └── ErrorHandle               # Global exception handler
+│       │   └── mapper/                       # DTO ↔ Model mappers
+│       │       ├── TaskDtoMapper
+│       │       └── UserDtoMapper
+│       │
+│       ├── TaskBackendApplication            # Spring Boot entry point
+│       └── resources/
+│           └── application.yaml
+│
+│
+└── README.md
+```
+```
+
 ## Setup Instructions
  
 ### Prerequisites

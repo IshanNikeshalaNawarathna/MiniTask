@@ -14,12 +14,13 @@ import lk.mini.task_backend.domain.model.TaskModel;
 import lk.mini.task_backend.domain.model.UserModel;
 import lk.mini.task_backend.domain.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,54 +36,46 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public TaskModel create(TaskModel taskModel) {
-        User user = userJpa.findByUsername(taskModel.getUsername())
-                .orElseThrow(() ->
-                        new EntityNotFoundException("User not found: " + taskModel.getUsername()));
+        System.out.println("taskModel:"+taskModel.toString());
         Task task = mapper.toEntity(taskModel);
-        task.setUser(user);
-
         return mapper.toModel(taskJpa.save(task));
     }
 
     @Override
-    public TaskModel update(Long id, TaskModel taskModel) {
+    public TaskModel update(UUID id, TaskModel taskModel) {
 
         Task findTask = taskJpa.findById(id).orElseThrow(() -> new EntityNotFoundException("Task not found: " + id));
-        User user = userJpa.findByUsername(taskModel.getUsername())
-                .orElseThrow(() ->
-                        new EntityNotFoundException("User not found: " + taskModel.getUsername()));
 
-        findTask.setUser(user);
         findTask.setTitle(taskModel.getTitle());
         findTask.setDescription(taskModel.getDescription());
         findTask.setPriority(taskModel.getPriority());
-        findTask.setDueDate(taskModel.getDueDate());
+        findTask.setStatus(taskModel.getStatus());
+        findTask.setDueDate(LocalDate.parse(taskModel.getDueDate()));
         return mapper.toModel(taskJpa.save(findTask));
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         Task task = taskJpa.findById(id).orElseThrow(() -> new EntityNotFoundException("Task not found: " + id));
         taskJpa.delete(task);
     }
 
 
     @Override
-    public void updateStatus(Long taskid, String status) {
+    public void updateStatus(UUID taskid, String status, String username) {
         Task task = taskJpa.findById(taskid).orElseThrow(() -> new EntityNotFoundException("Task not found: " + taskid));
+        User user = userJpa.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found: " + username));
+        task.setUser(user);
         task.setStatus(Status.valueOf(status));
         taskJpa.save(task);
     }
 
     @Override
     public Page<TaskModel> findTasks(int page, int size, Status status, Priority priority, String sortBy, String sortDir) {
-        // FIXED: validate sortBy to prevent invalid field crashes
-        List<String> allowedSortFields = List.of("dueDate", "priority", "createdAt");
-        String safeSortBy = allowedSortFields.contains(sortBy) ? sortBy : "dueDate";
 
         Sort sort = sortDir.equalsIgnoreCase("desc")
-                ? Sort.by(safeSortBy).descending()
-                : Sort.by(safeSortBy).ascending();
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
@@ -97,7 +90,13 @@ public class TaskRepositoryImpl implements TaskRepository {
             taskPage = taskJpa.findAll(pageable);
         }
 
-        return taskPage.map(mapper::toModel);
+        List<TaskModel> taskList = taskPage.getContent().stream().map(task -> mapper.toModel(task)).toList();
+
+        return new PageImpl<>(
+                taskList,
+                pageable,
+                taskPage.getTotalElements()
+        );
     }
 
 

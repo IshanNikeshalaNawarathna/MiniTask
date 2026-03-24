@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserModel {
 
-    private Long id;
+    private UUID id;
     private String username;
     private String password;
     private Role role;

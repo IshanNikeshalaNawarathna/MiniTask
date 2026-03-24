@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class TaskRequest {
@@ -13,8 +14,8 @@ public class TaskRequest {
     private String description;
     private Status status;
     private Priority priority;
-    private LocalDate dueDate;
+    private String dueDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String username;
+    //private UUID userId;
 }

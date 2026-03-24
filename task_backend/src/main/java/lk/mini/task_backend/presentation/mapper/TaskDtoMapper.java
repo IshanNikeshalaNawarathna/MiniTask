@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface TaskDtoMapper {
 
-    @Mapping(target = "username", source = "username")
     TaskModel toModel(TaskRequest taskRequest);
     TaskResponse toDto(TaskModel taskModel);
 

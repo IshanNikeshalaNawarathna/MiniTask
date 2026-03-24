@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,31 +35,32 @@ public class TaskController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<TaskResponse> saveTask(@Validated @RequestBody TaskRequest taskRequest) {
+    public ResponseEntity<TaskResponse> saveTask(@RequestBody TaskRequest taskRequest) {
+        System.out.println("saveTask " + taskRequest);
         TaskModel taskModel = mapper.toModel(taskRequest);
         TaskModel saveModel = taskSaveUseCase.create(taskModel);
         return new ResponseEntity<>(mapper.toDto(saveModel), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/{userid}")
-    public ResponseEntity<TaskResponse> updateTask(@RequestBody TaskRequest taskRequest, @PathVariable Long userid) {
+    @PutMapping("/{taskId}")
+    public ResponseEntity<TaskResponse> updateTask(@RequestBody TaskRequest taskRequest, @PathVariable UUID taskId) {
+        System.out.println("update task " + taskRequest);
         TaskModel taskModel = mapper.toModel(taskRequest);
-        TaskModel updateTask = taskUpdateUseCase.update(userid, taskModel);
+        TaskModel updateTask = taskUpdateUseCase.update(taskId, taskModel);
         return new ResponseEntity<>(mapper.toDto(updateTask), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{taskid}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long taskid) {
+    public ResponseEntity<Void> deleteTask(@PathVariable UUID taskid) {
         taskDeleteUseCase.delete(taskid);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/{taskid}/{status}")
-    public ResponseEntity<Void> updateStatus(@PathVariable Long taskid, @PathVariable String status) {
-        taskUpdateStatusUseCase.statusUpdate(taskid, status);
+    @GetMapping("/{id}")
+    public ResponseEntity<Void> statusUpdate(@PathVariable UUID id) {
+        taskUpdateStatusUseCase.statusUpdate(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -68,8 +70,8 @@ public class TaskController {
                                                                   @RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "5") int size,
 
-                                                                  @RequestParam(required = false) Status status,
-                                                                  @RequestParam(required = false) Priority priority,
+                                                                  @RequestParam(required = false) String status,
+                                                                  @RequestParam(required = false) String priority,
 
                                                                   @RequestParam(defaultValue = "dueDate") String sortBy,
                                                                   @RequestParam(defaultValue = "asc") String sortDir

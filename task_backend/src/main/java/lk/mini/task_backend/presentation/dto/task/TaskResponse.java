@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Data
 public class TaskResponse {
-    private Long id;
+    private UUID id;
     private String title;
     private String description;
     private Status status;
@@ -18,5 +18,5 @@ public class TaskResponse {
     private LocalDate dueDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String username;
+    private UUID userId;
 }

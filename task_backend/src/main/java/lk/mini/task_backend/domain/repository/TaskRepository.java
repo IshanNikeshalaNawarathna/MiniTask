@@ -12,9 +12,9 @@ import java.util.UUID;
 public interface TaskRepository {
 
     TaskModel create(TaskModel taskModel);
-    TaskModel update(Long id, TaskModel taskModel);
-    void delete(Long id);
-    void updateStatus(Long taskid, String status);
+    TaskModel update(UUID id, TaskModel taskModel);
+    void delete(UUID id);
+    void updateStatus(UUID taskid, String status, String username);
     Page<TaskModel> findTasks(
             int page,
             int size,

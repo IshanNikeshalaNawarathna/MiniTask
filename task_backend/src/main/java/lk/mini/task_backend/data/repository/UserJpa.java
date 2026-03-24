@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserJpa extends JpaRepository<User, Long> {
+public interface UserJpa extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
+    List<User> findByRole(Role role);
 
 }

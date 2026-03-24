@@ -13,7 +13,7 @@ public class TaskDeleteUseCase {
 
     private final TaskRepository taskRepository;
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
        taskRepository.delete(id);
     }
 

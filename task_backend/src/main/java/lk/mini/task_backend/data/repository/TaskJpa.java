@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface TaskJpa extends JpaRepository<Task, Long> {
+public interface TaskJpa extends JpaRepository<Task, UUID> {
     Page<Task> findByStatus(Status status, Pageable pageable);
     Page<Task> findByPriority(Priority priority, Pageable pageable);
     Page<Task> findByStatusAndPriority(Status status, Priority priority, Pageable pageable);

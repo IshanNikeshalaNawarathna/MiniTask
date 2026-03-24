@@ -22,13 +22,28 @@ public class FindAllUsersUseCase {
     public PageResponse<TaskModel> findTasks(   // FIXED: returns TaskModel
                                                 int page,
                                                 int size,
-                                                Status status,
-                                                Priority priority,
+                                                String status,
+                                                String priority,
                                                 String sortBy,
                                                 String sortDir
     ) {
+
+        Status statusEnum = null;
+        Priority priorityEnum = null;
+
+        try {
+            if (status != null && !status.isEmpty()) {
+                statusEnum = Status.valueOf(status);
+            }
+            if (priority != null && !priority.isEmpty()) {
+                priorityEnum = Priority.valueOf(priority);
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid status or priority");
+        }
+
         Page<TaskModel> taskPage =
-                taskRepository.findTasks(page, size, status, priority, sortBy, sortDir);
+                taskRepository.findTasks(page, size, statusEnum, priorityEnum, sortBy, sortDir);
 
         return new PageResponse<>(
                 taskPage.getNumber(),

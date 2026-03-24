@@ -13,7 +13,7 @@ public class TaskUpdateUseCase {
 
     private final TaskRepository taskRepository;
 
-    public TaskModel update(Long id, TaskModel taskModel) {
+    public TaskModel update(UUID id, TaskModel taskModel) {
         return taskRepository.update(id, taskModel);
     }
 

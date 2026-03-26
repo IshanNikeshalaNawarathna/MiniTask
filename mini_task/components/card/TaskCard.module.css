@@ -1,0 +1,115 @@
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.description {
+  margin: 12px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.date {
+  font-size: 12px;
+  color: #888;
+}
+
+/* STATUS */
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.todo {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+
+.in-progress {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.done {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+/* ACTIONS */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* FIXED: use class instead of global button */
+.btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* BUTTON COLORS */
+.doneBtn {
+  background: #22c55e;
+  color: white;
+}
+.doneBtn:hover {
+  background: #16a34a;
+}
+
+.editBtn {
+  background: #facc15;
+  color: #000;
+}
+.editBtn:hover {
+  background: #eab308;
+}
+
+.deleteBtn {
+  background: #ef4444;
+  color: white;
+}
+.deleteBtn:hover {
+  background: #dc2626;
+}
+
+.createBtn {
+  background: #3b82f6;
+  color: white;
+}
+.createBtn:hover {
+  background: #2563eb;
+}
